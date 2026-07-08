@@ -53,6 +53,15 @@ export async function POST(req: NextRequest) {
     // Rate limiting (applied after validation to avoid wasting budget on bad requests)
     const ip = req.headers.get("x-forwarded-for") || "127.0.0.1";
     const now = Date.now();
+
+    // Cleanup expired entries periodically to prevent memory leaks
+    const oneMinAgo = now - RATE_LIMIT_WINDOW;
+    for (const [key, value] of rateLimitMap.entries()) {
+      if (value.lastReset < oneMinAgo) {
+        rateLimitMap.delete(key);
+      }
+    }
+
     const limitData = rateLimitMap.get(ip) || { count: 0, lastReset: now };
 
     if (now - limitData.lastReset > RATE_LIMIT_WINDOW) {

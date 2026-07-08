@@ -1,10 +1,59 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function FanHub() {
   const [selectedTopic, setSelectedTopic] = useState<string | null>(null);
+
+  // Real-time Match score states (starting USA 2 - 1 England at Min 72)
+  const [matchMinute, setMatchMinute] = useState(72);
+  const [usaScore, setUsaScore] = useState(2);
+  const [englandScore, setEnglandScore] = useState(1);
+
+  // Real-time transit statuses
+  const [shuttleStatus, setShuttleStatus] = useState("On Time");
+  const [metroStatus, setMetroStatus] = useState("On Time");
+  const [gateFlowStatus, setGateFlowStatus] = useState("Heavy");
+
+  useEffect(() => {
+    // Increment match time and randomly update scores
+    const matchTimer = setInterval(() => {
+      setMatchMinute((prev) => {
+        if (prev >= 90) {
+          clearInterval(matchTimer);
+          return 90;
+        }
+        // Small chance of score change
+        if (Math.random() > 0.95) {
+          if (Math.random() > 0.5) {
+            setUsaScore((s) => s + 1);
+          } else {
+            setEnglandScore((s) => s + 1);
+          }
+        }
+        return prev + 1;
+      });
+    }, 15000);
+
+    // Randomly update transit statuses to simulate real-time operations feed
+    const transitTimer = setInterval(() => {
+      if (Math.random() > 0.8) {
+        setShuttleStatus((s) => (s === "On Time" ? "Minor Delay (3m)" : "On Time"));
+      }
+      if (Math.random() > 0.8) {
+        setMetroStatus((s) => (s === "On Time" ? "Crowded" : "On Time"));
+      }
+      if (Math.random() > 0.7) {
+        setGateFlowStatus((s) => (s === "Heavy" ? "Normal Flow" : "Heavy"));
+      }
+    }, 10000);
+
+    return () => {
+      clearInterval(matchTimer);
+      clearInterval(transitTimer);
+    };
+  }, []);
 
   const faqItems = [
     {
@@ -38,16 +87,16 @@ export default function FanHub() {
           <h2 className="card-title">Match Status</h2>
           <div className="match-board">
             <div className="match-header">
-              <span>LIVE - Min 72</span>
+              <span>LIVE - Min {matchMinute}</span>
               <span>Group Stage</span>
             </div>
             <div className="match-team-row">
               <span>USA 🇺🇸</span>
-              <span>2</span>
+              <span>{usaScore}</span>
             </div>
             <div className="match-team-row mt-1">
               <span>England 🏴󠁧󠁢󠁥󠁮󠁧󠁿</span>
-              <span>1</span>
+              <span>{englandScore}</span>
             </div>
           </div>
           <p className="match-footer">Next Match: Mexico 🇲🇽 vs Argentina 🇦🇷 at 20:00 local time.</p>
@@ -60,15 +109,21 @@ export default function FanHub() {
           <div className="transit-list">
             <div className="transit-row">
               <span>Stadium Express Shuttle</span>
-              <span className="status-pill status-green">On Time</span>
+              <span className={`status-pill ${shuttleStatus.includes("Delay") ? "status-pink" : "status-green"}`}>
+                {shuttleStatus}
+              </span>
             </div>
             <div className="transit-row">
               <span>Metro Line Red</span>
-              <span className="status-pill status-green">On Time</span>
+              <span className={`status-pill ${metroStatus.includes("Crowded") ? "status-pink" : "status-green"}`}>
+                {metroStatus}
+              </span>
             </div>
             <div className="transit-row">
               <span>Gate A Flow Status</span>
-              <span className="status-pill status-pink">Heavy</span>
+              <span className={`status-pill ${gateFlowStatus === "Heavy" ? "status-pink" : "status-green"}`}>
+                {gateFlowStatus}
+              </span>
             </div>
           </div>
         </div>
