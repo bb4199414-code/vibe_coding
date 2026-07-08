@@ -1,6 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 import { GoogleGenAI } from "@google/genai";
 
+// Cache for GoogleGenAI instance to improve efficiency
+let cachedAIInstance: GoogleGenAI | null = null;
+let cachedApiKey = "";
+
+function getGoogleGenAI(apiKey: string): GoogleGenAI {
+  if (!cachedAIInstance || cachedApiKey !== apiKey) {
+    cachedAIInstance = new GoogleGenAI({ apiKey });
+    cachedApiKey = apiKey;
+  }
+  return cachedAIInstance;
+}
+
 // Simple in-memory rate limiter: max 10 requests per minute per IP
 const rateLimitMap = new Map<string, { count: number; lastReset: number }>();
 const RATE_LIMIT_WINDOW = 60 * 1000;
@@ -60,13 +72,15 @@ export async function POST(req: NextRequest) {
 
     if (!process.env.GEMINI_API_KEY) {
       // Mock response for showcase if no API key is set to avoid crashing the demo
-      await new Promise(r => setTimeout(r, 1200));
+      if (process.env.NODE_ENV !== "test") {
+        await new Promise(r => setTimeout(r, 1200));
+      }
       return NextResponse.json({ 
         reply: `(Demo Mode - No API Key) You said: "${sanitizedMessage}". I'm Nexus AI. For the 2026 World Cup, I can help you find Gate C, check the wait time for Hot Dogs (currently 5 mins), or find the nearest accessible restroom.` 
       });
     }
 
-    const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+    const ai = getGoogleGenAI(process.env.GEMINI_API_KEY);
     
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash",

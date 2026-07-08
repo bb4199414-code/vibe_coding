@@ -2,20 +2,16 @@
 
 import React, { useState, useRef, useEffect, memo } from "react";
 
+interface Message {
+  id: string;
+  role: "user" | "assistant";
+  content: string;
+}
+
 // Memoized Message Item Component for efficiency
-const MessageItem = memo(({ msg }: { msg: { role: "user" | "assistant"; content: string } }) => {
+const MessageItem = memo(({ msg }: { msg: Message }) => {
   return (
-    <div style={{
-      alignSelf: msg.role === "user" ? "flex-end" : "flex-start",
-      maxWidth: "85%",
-      padding: "1rem 1.2rem",
-      borderRadius: msg.role === "user" ? "20px 20px 0px 20px" : "20px 20px 20px 0px",
-      background: msg.role === "user" ? "linear-gradient(135deg, var(--color-neon-purple), var(--color-neon-pink))" : "rgba(255, 255, 255, 0.1)",
-      color: "#fff",
-      lineHeight: 1.5,
-      fontSize: "0.95rem",
-      boxShadow: "0 4px 15px rgba(0,0,0,0.1)"
-    }}>
+    <div className={msg.role === "user" ? "chat-msg-user" : "chat-msg-ai"}>
       {msg.content}
     </div>
   );
@@ -24,8 +20,12 @@ MessageItem.displayName = "MessageItem";
 
 export default function ChatModal() {
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<{ role: "user" | "assistant"; content: string }[]>([
-    { role: "assistant", content: "Hi! I am Nexus AI. I can help you with stadium navigation, food wait times, and accessibility routes. How can I assist you today?" }
+  const [messages, setMessages] = useState<Message[]>([
+    {
+      id: "initial-msg",
+      role: "assistant",
+      content: "Hi! I am Nexus AI. I can help you with stadium navigation, food wait times, and accessibility routes. How can I assist you today?"
+    }
   ]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -43,7 +43,8 @@ export default function ChatModal() {
     if (!input.trim()) return;
 
     const userMessage = input.trim();
-    setMessages(prev => [...prev, { role: "user", content: userMessage }]);
+    const userMsgId = `${Date.now()}-user`;
+    setMessages(prev => [...prev, { id: userMsgId, role: "user", content: userMessage }]);
     setInput("");
     setIsLoading(true);
 
@@ -57,10 +58,12 @@ export default function ChatModal() {
       if (!response.ok) throw new Error("Network response was not ok");
 
       const data = await response.json();
-      setMessages(prev => [...prev, { role: "assistant", content: data.reply }]);
+      const assistantMsgId = `${Date.now()}-assistant`;
+      setMessages(prev => [...prev, { id: assistantMsgId, role: "assistant", content: data.reply }]);
     } catch (error) {
       console.error("Error fetching response:", error);
-      setMessages(prev => [...prev, { role: "assistant", content: "Sorry, I am having trouble connecting to the network right now." }]);
+      const errorMsgId = `${Date.now()}-error`;
+      setMessages(prev => [...prev, { id: errorMsgId, role: "assistant", content: "Sorry, I am having trouble connecting to the network right now." }]);
     } finally {
       setIsLoading(false);
     }
@@ -70,24 +73,8 @@ export default function ChatModal() {
     <>
       {/* Floating Action Button */}
       <button 
-        className="btn-primary" 
-        onClick={() => setIsOpen(true)}
-        style={{
-          position: "fixed",
-          bottom: "2rem",
-          right: "2rem",
-          width: "65px",
-          height: "65px",
-          borderRadius: "50%",
-          padding: 0,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          fontSize: "1.8rem",
-          zIndex: 100,
-          boxShadow: "0 8px 30px rgba(16, 185, 129, 0.4)",
-          background: "linear-gradient(135deg, var(--color-neon-teal), var(--color-neon-purple))"
-        }}
+        className="btn-primary chat-fab" 
+        onClick={() => setIsOpen(prev => !prev)}
         aria-label="Open AI Assistant"
       >
         ✨
@@ -95,19 +82,7 @@ export default function ChatModal() {
 
       {/* Chat Modal */}
       {isOpen && (
-        <div style={{
-          position: "fixed",
-          bottom: "6.5rem",
-          right: "2rem",
-          width: "380px",
-          height: "550px",
-          zIndex: 100,
-          display: "flex",
-          flexDirection: "column",
-          borderRadius: "var(--border-radius)",
-          overflow: "hidden",
-          animation: "slideUp 0.3s ease-out"
-        }} className="glass-panel">
+        <div className="glass-panel chat-modal-container">
           
           <style>{`
             @keyframes slideUp {
@@ -117,21 +92,14 @@ export default function ChatModal() {
           `}</style>
 
           {/* Header */}
-          <div style={{
-            background: "linear-gradient(135deg, rgba(16, 185, 129, 0.3), rgba(155, 38, 182, 0.3))",
-            padding: "1.2rem",
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            borderBottom: "1px solid var(--glass-border)"
-          }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <div className="chat-header">
+            <div className="chat-header-title">
               <span style={{ fontSize: "1.5rem" }}>🤖</span>
               <h3 style={{ margin: 0, fontSize: "1.1rem", fontWeight: 600 }}>Nexus AI Assistant</h3>
             </div>
             <button 
               onClick={() => setIsOpen(false)}
-              style={{ background: "transparent", border: "none", color: "var(--text-main)", cursor: "pointer", fontSize: "1.2rem" }}
+              className="chat-close-btn"
               aria-label="Close chat"
             >
               ✕
@@ -141,18 +109,10 @@ export default function ChatModal() {
           {/* Messages */}
           <div 
             aria-live="polite"
-            style={{
-              flex: 1,
-              padding: "1.5rem",
-              overflowY: "auto",
-              display: "flex",
-              flexDirection: "column",
-              gap: "1.2rem",
-              scrollBehavior: "smooth"
-            }}
+            className="chat-messages-container"
           >
-            {messages.map((msg, index) => (
-              <MessageItem key={index} msg={msg} />
+            {messages.map((msg) => (
+              <MessageItem key={msg.id} msg={msg} />
             ))}
             {isLoading && (
               <div style={{
@@ -184,13 +144,7 @@ export default function ChatModal() {
           </div>
 
           {/* Input Area */}
-          <div style={{
-            padding: "1.2rem",
-            borderTop: "1px solid var(--glass-border)",
-            display: "flex",
-            gap: "0.8rem",
-            background: "rgba(0, 0, 0, 0.3)"
-          }}>
+          <div className="chat-input-area">
             <input 
               id="chat-input"
               aria-label="Type your message for Nexus AI"
@@ -199,32 +153,13 @@ export default function ChatModal() {
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSend()}
               placeholder="Ask for directions or food wait times..."
-              style={{
-                flex: 1,
-                padding: "0.8rem 1.2rem",
-                borderRadius: "25px",
-                border: "1px solid var(--glass-border)",
-                background: "rgba(255, 255, 255, 0.08)",
-                color: "var(--text-main)",
-                outline: "none",
-                fontSize: "0.95rem",
-                transition: "background 0.3s ease"
-              }}
-              onFocus={(e) => e.target.style.background = "rgba(255, 255, 255, 0.12)"}
-              onBlur={(e) => e.target.style.background = "rgba(255, 255, 255, 0.08)"}
+              className="chat-input-field"
             />
             <button 
               onClick={handleSend}
               disabled={!input.trim() || isLoading}
-              className="btn-primary"
+              className="btn-primary chat-send-btn"
               style={{ 
-                borderRadius: "50%", 
-                width: "45px", 
-                height: "45px",
-                padding: 0,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
                 background: input.trim() && !isLoading ? "var(--color-neon-teal)" : "rgba(255,255,255,0.1)",
                 opacity: input.trim() && !isLoading ? 1 : 0.5,
                 boxShadow: input.trim() && !isLoading ? "0 4px 15px rgba(16, 185, 129, 0.4)" : "none"

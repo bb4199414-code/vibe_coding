@@ -140,3 +140,453 @@ h1, h2, h3, h4, h5, h6 {
     animation: none !important;
   }
 }
+
+/* Page Layout & Landing page */
+.landing-main {
+  padding: 4rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.landing-header {
+  text-align: center;
+  margin-bottom: 5rem;
+  margin-top: 2rem;
+}
+
+.landing-title {
+  font-size: 4.5rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.1;
+}
+
+.landing-subtitle {
+  font-size: 1.25rem;
+  color: var(--text-muted);
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.landing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2.5rem;
+}
+
+.landing-card {
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.card-icon {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.card-title {
+  margin-bottom: 1rem;
+  font-size: 1.8rem;
+}
+
+.card-desc {
+  color: var(--text-muted);
+  margin-bottom: 2rem;
+  flex-grow: 1;
+  line-height: 1.5;
+}
+
+.card-btn {
+  width: 100%;
+  text-align: center;
+  text-decoration: none;
+  box-sizing: border-box;
+}
+
+/* Fan Portal Layout & Accordion */
+.page-container {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 3rem;
+}
+
+.page-title {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.back-btn {
+  text-decoration: none;
+}
+
+.hub-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.match-board {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 1rem;
+  borderRadius: 12px;
+  margin-bottom: 1rem;
+}
+
+.match-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  color: var(--color-neon-teal);
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.match-team-row {
+  font-size: 1.2rem;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+}
+
+.match-team-row.mt-1 {
+  margin-top: 0.3rem;
+}
+
+.match-footer {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  flex-grow: 1;
+}
+
+.transit-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  flex-grow: 1;
+}
+
+.transit-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.status-pill {
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+}
+
+.status-pill.status-green {
+  background: rgba(16, 185, 129, 0.2);
+  color: var(--color-neon-teal);
+}
+
+.status-pill.status-pink {
+  background: rgba(236, 72, 153, 0.2);
+  color: var(--color-neon-pink);
+}
+
+.faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.faq-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.faq-panel {
+  background: rgba(255, 255, 255, 0.02);
+  padding: 1rem;
+  border-radius: 8px;
+  border-left: 4px solid var(--color-neon-purple);
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin-bottom: 0.5rem;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.help-banner {
+  padding: 2.5rem;
+  text-align: center;
+}
+
+.help-desc {
+  color: var(--text-muted);
+  max-width: 600px;
+  margin: 0 auto 1.5rem auto;
+  line-height: 1.6;
+}
+
+/* Staff Command Center */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.kpi-label {
+  color: var(--text-muted);
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.kpi-value {
+  font-size: 2.5rem;
+  font-weight: bold;
+}
+
+.kpi-value.teal {
+  color: var(--color-neon-teal);
+}
+
+.kpi-value.purple {
+  color: var(--color-neon-purple);
+}
+
+.kpi-value.pink {
+  color: var(--color-neon-pink);
+}
+
+.kpi-footer {
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+}
+
+.kpi-footer.teal {
+  color: rgba(16, 185, 129, 0.8);
+}
+
+.kpi-footer.purple {
+  color: rgba(155, 38, 182, 0.8);
+}
+
+.kpi-footer.pink {
+  color: rgba(236, 72, 153, 0.8);
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 2rem;
+}
+
+.heatmap-container {
+  height: 400px;
+  border-radius: 12px;
+  background: linear-gradient(45deg, rgba(16, 185, 129, 0.1), rgba(155, 38, 182, 0.1));
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--glass-border);
+}
+
+.heatmap-legend {
+  position: absolute;
+  bottom: 1rem;
+  left: 1rem;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+
+.reports-feed {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  overflow-y: auto;
+  max-height: 350px;
+  padding-right: 0.5rem;
+}
+
+.report-gen-btn {
+  margin-top: 2rem;
+  width: 100%;
+}
+
+.error-banner {
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #fca5a5;
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+}
+
+/* Chat Modal styling */
+.chat-fab {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  z-index: 100;
+  box-shadow: 0 8px 30px rgba(16, 185, 129, 0.4);
+  background: linear-gradient(135deg, var(--color-neon-teal), var(--color-neon-purple));
+}
+
+.chat-modal-container {
+  position: fixed;
+  bottom: 6.5rem;
+  right: 2rem;
+  width: 380px;
+  height: 550px;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  animation: slideUp 0.3s ease-out;
+}
+
+.chat-header {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.3), rgba(155, 38, 182, 0.3));
+  padding: 1.2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.chat-header-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.chat-close-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-main);
+  cursor: pointer;
+  font-size: 1.2rem;
+}
+
+.chat-messages-container {
+  flex: 1;
+  padding: 1.5rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  scroll-behavior: smooth;
+}
+
+.chat-msg-user {
+  align-self: flex-end;
+  max-width: 85%;
+  padding: 1rem 1.2rem;
+  border-radius: 20px 20px 0px 20px;
+  background: linear-gradient(135deg, var(--color-neon-purple), var(--color-neon-pink));
+  color: #fff;
+  line-height: 1.5;
+  font-size: 0.95rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.chat-msg-ai {
+  align-self: flex-start;
+  max-width: 85%;
+  padding: 1rem 1.2rem;
+  border-radius: 20px 20px 20px 0px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  line-height: 1.5;
+  font-size: 0.95rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.chat-input-area {
+  padding: 1.2rem;
+  border-top: 1px solid var(--glass-border);
+  display: flex;
+  gap: 0.8rem;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.chat-input-field {
+  flex: 1;
+  padding: 0.8rem 1.2rem;
+  border-radius: 25px;
+  border: 1px solid var(--glass-border);
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-main);
+  outline: none;
+  font-size: 0.95rem;
+  transition: background 0.3s ease;
+}
+
+.chat-input-field:focus {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.chat-send-btn {
+  border-radius: 50%;
+  width: 45px;
+  height: 45px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-speed) ease;
+}
+
+.faq-btn {
+  border: 1px solid var(--glass-border);
+  border-radius: 8px;
+  padding: 0.8rem;
+  color: var(--text-main);
+  text-align: left;
+  cursor: pointer;
+  width: 100%;
+  font-weight: 600;
+  transition: all var(--transition-speed) ease;
+}
+
+.report-card {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 1rem;
+  border-radius: 12px;
+  transition: all var(--transition-speed) ease;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.info-card {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
